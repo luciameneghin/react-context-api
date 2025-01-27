@@ -1,30 +1,31 @@
-import { faTrashAlt } from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { NavLink } from "react-router-dom";
+import { useGLobalContext } from "../../context/GlobalContext";
 
 const PostsList = () => {
+
+  const { posts } = useGLobalContext()
+
   return (
     <div>
-      {post === null ?
-        (<h2>Loading...</h2>) : (
-          <div>
-            <h1 className="text-center fw-bold">{post.title}</h1>
-            <img src={post.image} alt={post.title} className="img-fluid mx-auto d-block border border-5 border-dark my-3" />
-            <p className="text-justify mt-5"><strong>Contenuto</strong><br />{post.content}</p>
-            <p className="text-justify"><strong>Tags: </strong>{post.tags.join(' | ')}</p>
-            <div className="d-flex justify-content-between">
-              <button className="btn btn-dark text-white"
-                onClick={() => navigate(-1)}>
-                Pagina precedente
-              </button>
-              <button className="btn btn-danger text-white"
-                onClick={handleRemovePost}>
-                <FontAwesomeIcon icon={faTrashAlt} color="white" />
-              </button>
-            </div>
-          </div>
+      <ul className="row row-cols-1 row-cols-md-2 row-cols-lg-3 d-flex justify-content-center">
+        {posts === null ?
+          (<h2>Loading...</h2>) : (
+            posts.map(post => (
+              <div className="card border-0 bg-light" key={post.id}>
+                <li className="list-group-item col my-3 text-center mx-3">
+                  <div className="mt-3">
+                    <h5 className="mb-3">{post.title}</h5>
+                    <img src={post.image} alt={post.title} className="img-fluid border border-3 border-dark" width='250' />
+                  </div>
+                  <p className="mt-3 mb-3 mx-3 fw-bold">{post.tags.join(', ')}</p>
+                  <NavLink className="btn btn-dark text-light mb-3" to={`/post-detail/${post.id}`}>Vedi post</NavLink>
+                </li>
+              </div>
+            ))
+          )
+        }
 
-        )
-      }
+      </ul>
     </div>
   )
 }
